@@ -113,9 +113,10 @@
     <div class="container">
         <h2>Share Text Using Clipboard</h2>
 
-        <!-- User A Section: Text input & Generate Code -->
+        <!-- User A Section: Text input & Custom Code -->
         <textarea id="textArea" placeholder="Enter your text here..." rows="4"></textarea><br>
-        <button onclick="generateCode()">Generate Code & Copy to Clipboard</button>
+        <input type="text" id="customCode" placeholder="Enter your custom code" /><br>
+        <button onclick="shareText()">Share Text with Custom Code</button>
         
         <div id="info"></div>
 
@@ -130,27 +131,29 @@
     <script>
         let codeStore = {}; // Temporary storage for code-text mapping
 
-        // Function to generate code and copy it to clipboard
-        function generateCode() {
+        // Function to share text with custom code
+        function shareText() {
             const text = document.getElementById('textArea').value;
-            if (text.trim() !== '') {
-                const code = 'dogis' + Math.random().toString(36).substring(2, 10); // Random code
-                codeStore[code] = text; // Store the mapping
+            const customCode = document.getElementById('customCode').value.trim();
 
-                // Update the UI with code and message
+            if (text.trim() !== '' && customCode !== '') {
+                // Store the text with the provided custom code
+                codeStore[customCode] = text;
+
+                // Provide feedback to the user
                 document.getElementById('info').innerHTML = `
-                    <p class="success">Code Generated: <strong>${code}</strong></p>
-                    <p class="success">The code has been copied to your clipboard. Share it with another user.</p>
+                    <p class="success">Text Shared Successfully!</p>
+                    <p class="success">Use the code <strong>${customCode}</strong> to retrieve the text.</p>
                 `;
                 
-                // Copy the generated code to clipboard
-                navigator.clipboard.writeText(code).then(() => {
+                // Copy the code to clipboard
+                navigator.clipboard.writeText(customCode).then(() => {
                     console.log('Code copied to clipboard!');
                 }).catch(err => {
                     console.error('Error copying code to clipboard:', err);
                 });
             } else {
-                alert("Please enter some text.");
+                alert("Please enter both text and a custom code.");
             }
         }
 
